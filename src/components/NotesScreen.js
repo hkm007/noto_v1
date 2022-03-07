@@ -1,19 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Notes from "./Notes";
+import { getAuth, signOut } from "firebase/auth"
 
-function NotesScreen() {
+function NotesScreen({setIsLoggedIn}) {
   const [text, setText] = useState("");
+  const [user, setUser] = useState(null);
 
   const addNotes = (e) => {
     e.preventDefault();
     console.log(text);
   };
 
+  const logout = () => {
+    const auth = getAuth();
+    signOut(auth)
+    .then(res => {
+      setIsLoggedIn(false);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  useEffect(() => {
+    const auth = getAuth();
+    setUser(auth.currentUser.displayName.substring(0, auth.currentUser.displayName.indexOf(' ')));
+  }, [setIsLoggedIn])
+
   return (
-    <div className="notes-card col-lg-10 mx-auto mt-5">
+    <div className="notes-card col-lg-10 mx-auto my-5">
       <div className="card">
         <div className="card-body">
-          <h1>Hola @<i>Himanshu</i></h1>
+          <div className="user-info">
+            <h1>@<i>{user} </i><button type="button" class="btn btn-outline-dark" onClick={logout}>Logout</button></h1>
+          </div>
           <hr />
           <form onSubmit={(e) => addNotes(e)}>
             <div className="mb-3">
