@@ -9,8 +9,6 @@ function LoginScreen() {
       const provider = new GoogleAuthProvider();
 
       signInWithPopup(auth, provider)
-      .then(res => console.log(res.user.displayName, res.user.email))
-      .catch(err => console.log(err))
   };
 
   return (
