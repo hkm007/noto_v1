@@ -1,54 +1,62 @@
 import React, { useEffect, useState } from "react";
 import Notes from "./Notes";
-import { getAuth, signOut } from "firebase/auth"
+import { getAuth, signOut } from "firebase/auth";
 import { set, ref, getDatabase, onValue, remove } from "firebase/database";
-import { getApp } from "firebase/app"
-import { v4 as uuidv4 } from 'uuid';
+import { getApp } from "firebase/app";
+import { v4 as uuidv4 } from "uuid";
 
-function NotesScreen({setIsLoggedIn}) {
+function NotesScreen({ setIsLoggedIn }) {
   const [text, setText] = useState("");
   const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
 
-  const db = getDatabase(getApp(), "https://noto-1b5c0-default-rtdb.asia-southeast1.firebasedatabase.app/");
+  const db = getDatabase(
+    getApp(),
+    "https://noto-1b5c0-default-rtdb.asia-southeast1.firebasedatabase.app/"
+  );
 
   useEffect(() => {
     const auth = getAuth();
-    setUser(auth.currentUser.displayName.substring(0, auth.currentUser.displayName.indexOf(' ')));
+    setUser(
+      auth.currentUser.displayName.substring(
+        0,
+        auth.currentUser.displayName.indexOf(" ")
+      )
+    );
 
     onValue(ref(db, `/notes/${getAuth().currentUser.uid}`), (snapshot) => {
       setNotes([]);
-      const data = snapshot.val()
-      if(data != null) {
-        Object.values(data).map(note => {
+      const data = snapshot.val();
+      if (data != null) {
+        Object.values(data).map((note) =>
           setNotes((oldArray) => [...oldArray, note])
-        })
+        );
       }
-    })
-  }, [db])
+    });
+  }, [db]);
 
   // function to logout user
   const logout = () => {
     const auth = getAuth();
     signOut(auth)
-    .then(res => {
-      setIsLoggedIn(false);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
+      .then((res) => {
+        setIsLoggedIn(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // function to add a new note
   const addNotes = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
-    var notesId = uuidv4()
+    var notesId = uuidv4();
     set(ref(db, `notes/${getAuth().currentUser.uid}/${notesId}`), {
       text,
       date: Date.now(),
-      _id: notesId
-    })
+      _id: notesId,
+    });
 
     setText("");
   };
@@ -56,51 +64,55 @@ function NotesScreen({setIsLoggedIn}) {
   // function to delete a note
   const deleteNote = (notesId) => {
     remove(ref(db, `/notes/${getAuth().currentUser.uid}/${notesId}`));
-  }
+  };
 
   return (
-    <div className="notes-card col-lg-10 mx-auto my-5">
-      <div className="card">
-        <div className="card-body">
-          <div className="user-info">
-            <h1>@<i>{user} </i><button type="button" className="btn btn-outline-dark" onClick={logout}>Logout</button></h1>
-          </div>
-          <hr />
-          <form onSubmit={(e) => addNotes(e)}>
-            <div className="mb-3">
-              <label
-                htmlFor="exampleFormControlTextarea1"
-                className="form-label"
-              >
-                Add a Note
-              </label>
-              <textarea
-                className="form-control"
-                id="exampleFormControlTextarea1"
-                rows="5"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                required
-              ></textarea>
+    <div className="mx-2">
+      <div className="notes-card col-lg-10 mx-auto my-5">
+        <div className="card">
+          <div className="card-body">
+            <div className="user-info">
+              <i className="username">@{user} </i><i className="bi bi-box-arrow-right" onClick={logout}></i>
             </div>
-            <div className="d-grid gap-2">
-              <button className="btn btn-secondary" type="submit">
-                Submit
-              </button>
-            </div>
-          </form>
-          <hr />
+            <hr />
+            <form onSubmit={(e) => addNotes(e)}>
+              <div className="mb-3">
+                <label
+                  htmlFor="exampleFormControlTextarea1"
+                  className="form-label"
+                >
+                  Add a Note
+                </label>
+                <textarea
+                  className="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="5"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  required
+                ></textarea>
+              </div>
+              <div className="d-grid gap-2">
+                <button className="btn btn-outline-secondary" type="submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+            <hr />
 
-          <div className="row m-1">
-              {
-                notes.length 
-                ?
-                notes.map(note => {
-                  return <Notes key={note._id} note={note} deleteNote={deleteNote} />
+            <div className="row m-1">
+              {notes.length ? (
+                notes.map((note) => {
+                  return (
+                    <Notes key={note._id} note={note} deleteNote={deleteNote} />
+                  );
                 })
-                :
-                <center><i>You don't have any notes yet! Add few here.</i></center>
-              }
+              ) : (
+                <center>
+                  <i>You don't have any notes yet! Add few here.</i>
+                </center>
+              )}
+            </div>
           </div>
         </div>
       </div>

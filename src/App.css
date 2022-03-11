@@ -2,8 +2,19 @@
     margin-top: 10rem;
 }
 
-.logout-button {
-    justify-items: end;
+.username {
+    font-size: 30px;
+    margin-right: 4px;
+}
+
+.bi-box-arrow-right:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.user-info, .login-info {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 20px; 
 }
 
 .card {
@@ -16,12 +27,12 @@
 }
 
 pre {
-    font-family: 'Open Sans', sans-serif; 
+    font-family: 'Open sans', sans-serif; 
     font-size: 15px; 
     white-space: pre-wrap;
 }
 
-.delete-note-button:hover {
-    color: red;
-    cursor: pointer !important;
+.note-card-footer {
+    display: flex;
+    justify-content: space-between;
 }

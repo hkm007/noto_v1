@@ -7,9 +7,9 @@ function Notes({note, deleteNote}) {
         <div className="card-body">
           <pre>{note.text}</pre>
           <hr />
-          <div className="row">
-            <div className="col-lg-10"><i>{new Date(note.date).toDateString()}</i></div>
-            <div className="col-lg-2"><b className="delete-note-button" onClick={() => deleteNote(note._id)}>X</b></div>
+          <div className="note-card-footer">
+            <div className="col-lg-11"><i>{new Date(note.date).toDateString()}</i></div>
+            <div className="col-lg-1"><b className="delete-note-button" onClick={() => deleteNote(note._id)}>X</b></div>
           </div>
         </div>
       </div>
