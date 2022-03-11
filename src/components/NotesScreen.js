@@ -12,7 +12,7 @@ function NotesScreen({ setIsLoggedIn }) {
 
   const db = getDatabase(
     getApp(),
-    "https://noto-1b5c0-default-rtdb.asia-southeast1.firebasedatabase.app/"
+    "${{ secrets.DBURL }}"
   );
 
   useEffect(() => {
