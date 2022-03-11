@@ -12,7 +12,7 @@ function NotesScreen({ setIsLoggedIn }) {
 
   const db = getDatabase(
     getApp(),
-    "${{ secrets.DBURL }}"
+    "https://noto-1b5c0-default-rtdb.asia-southeast1.firebasedatabase.app/"
   );
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function NotesScreen({ setIsLoggedIn }) {
         <div className="card">
           <div className="card-body">
             <div className="user-info">
-              <i className="username">@{user} </i><i className="bi bi-box-arrow-right" onClick={logout}></i>
+            <i className="username">@{user} </i><i className="bi bi-box-arrow-right" onClick={logout}></i>
             </div>
             <hr />
             <form onSubmit={(e) => addNotes(e)}>
